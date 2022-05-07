@@ -1,10 +1,10 @@
 const request = require('supertest')
 const app = require('./app')
 
-describe('get /balance', () => {
+describe('get /wallet/balance', () => {
     it('should return balance', () => {
         return request(app)
-            .get('/balance/terra186dzh7z2e2cphxvgt3vr7a7lmhl0un8rl8dyv8')
+            .get('/wallet/balance/terra186dzh7z2e2cphxvgt3vr7a7lmhl0un8rl8dyv8')
             .expect('Content-Type', /json/)
             .expect(200)
             .then(response => {
