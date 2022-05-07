@@ -1,8 +1,9 @@
-var express = require("express");
-var router = express.Router();
-const { getBalance } = require("../services/TerraService");
+const express = require('express');
 
-router.get("/wallet/balance/:address", async function (req, res, next) {
+const router = express.Router();
+const { getBalance } = require('../services/TerraService');
+
+router.get('/wallet/balance/:address', async (req, res, next) => {
   try {
     const { address } = req.params;
     const balance = await getBalance(address);
