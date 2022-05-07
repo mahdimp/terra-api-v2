@@ -1,4 +1,4 @@
-const { LCDClient } = require('@terra-money/terra.js');
+const { LCDClient, MnemonicKey } = require('@terra-money/terra.js');
 
 const terraClient = new LCDClient({
   URL: 'https://bombay-lcd.terra.dev',
@@ -14,4 +14,10 @@ async function getBalance(address) {
   return lunaBalance ? (lunaBalance.amount / 1000000).toFixed(2) : 0;
 }
 
-module.exports = { getBalance };
+function newWallet() {
+  const mk = new MnemonicKey();
+  terraClient.wallet(mk);
+  return mk;
+}
+
+module.exports = { getBalance, newWallet };

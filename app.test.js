@@ -14,3 +14,29 @@ describe('get /wallet/balance', () => {
       );
     }));
 });
+
+describe('get /wallet/new', () => {
+  it('should has a mneumonic', () => request(app)
+    .get('/wallet/new')
+    .expect('Content-Type', /json/)
+    .expect(200)
+    .then((response) => {
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          mnemonic: expect.any(String),
+        }),
+      );
+    }));
+
+  it('should has a accountAddress', () => request(app)
+    .get('/wallet/new')
+    .expect('Content-Type', /json/)
+    .expect(200)
+    .then((response) => {
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          accountAddress: expect.any(String),
+        }),
+      );
+    }));
+});
