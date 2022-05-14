@@ -1,4 +1,5 @@
 const { LCDClient, MnemonicKey } = require('@terra-money/terra.js');
+const { default: axios } = require('axios');
 
 const terraClient = new LCDClient({
   URL: 'https://bombay-lcd.terra.dev',
@@ -20,4 +21,10 @@ function newWallet() {
   return mk;
 }
 
-module.exports = { getBalance, newWallet };
+async function getTransactions(address) {
+  const url = `https://bombay-fcd.terra.dev/v1/txs?offset=0&limit=100&account=${address}`;
+  const res = await axios.get(url)
+  return res.data
+}
+
+module.exports = { getBalance, newWallet, getTransactions };

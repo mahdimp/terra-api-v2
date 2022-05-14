@@ -40,3 +40,17 @@ describe('get /wallet/new', () => {
       );
     }));
 });
+
+describe('get /transactions', () => {
+  it('should return transactions', () => request(app)
+    .get('/transactions')
+    .expect('Content-Type', /json/)
+    .expect(200)
+    .then((response) => {
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          transactions: expect.any(Array),
+        }),
+      );
+    }));
+});
