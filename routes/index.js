@@ -5,6 +5,7 @@ const {
   getBalance,
   newWallet,
   getTransactions,
+  sendTransaction,
 } = require("../services/TerraService");
 
 router.get("/wallet/balance/:address", async (req, res) => {
@@ -47,6 +48,21 @@ router.get("/transactions/in/:address", async (req, res) => {
   } catch (e) {
     res.json({
       error: e.message,
+    });
+  }
+});
+
+router.post("/transactions", async (req, res) => {
+  try {
+    const { to, mnemonic, amount, memo } = req.body;
+    const response = await sendTransaction(amount, to, mnemonic, memo);
+    res.json({
+      result: response,
+    });
+  } catch (e) {
+    console.log(e);
+    res.json({
+      error: e,
     });
   }
 });

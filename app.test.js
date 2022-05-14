@@ -41,15 +41,15 @@ describe('get /wallet/new', () => {
     }));
 });
 
-describe('get /transactions', () => {
+describe('get /transactions/in/:address', () => {
   it('should return transactions', () => request(app)
-    .get('/transactions')
+    .get('/transactions/in/terra13zrr0axd0ef347zqeksrfpagsq0yf358r6mexr')
     .expect('Content-Type', /json/)
     .expect(200)
     .then((response) => {
       expect(response.body).toEqual(
         expect.objectContaining({
-          transactions: expect.any(Array),
+          transactions: expect.any(Object),
         }),
       );
     }));
