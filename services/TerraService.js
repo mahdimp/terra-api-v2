@@ -1,25 +1,26 @@
 const {
   LCDClient,
   MnemonicKey,
-  MsgSend
-} = require("@terra-money/terra.js");
-const { default: axios } = require("axios");
-const { exit } = require("process");
-const GAS_LIMIT = 10000000;
-require('dotenv').config()
+  MsgSend,
+} = require('@terra-money/terra.js');
+const { default: axios } = require('axios');
+const { exit } = require('process');
 
-const NETWORK_ADDRESS = process.env.NETWORK_ADDRESS
+const GAS_LIMIT = 10000000;
+require('dotenv').config();
+
+const { NETWORK_ADDRESS } = process.env;
 
 const terraClient = new LCDClient({
   URL: NETWORK_ADDRESS,
-  chainID: "columbus-5",
+  chainID: 'columbus-5',
 });
 
 async function getBalance(address) {
   const [balance] = await terraClient.bank.balance(address);
   const balanceData = balance.toData();
   const lunaBalance = balanceData.find(
-    (balanceItem) => balanceItem.denom === "uluna"
+    (balanceItem) => balanceItem.denom === 'uluna',
   );
   return lunaBalance ? (lunaBalance.amount / 1000000).toFixed(2) : 0;
 }
@@ -36,10 +37,10 @@ async function getTransactions(address) {
   return res.data;
 }
 
-async function sendTransaction(amount, to, mnemonic, memo = "") {
+async function sendTransaction(amount, to, mnemonic, memo = '') {
   const mk = new MnemonicKey({ mnemonic });
   const wallet = terraClient.wallet(mk);
-  const message = new MsgSend(wallet.key.accAddress, to, {uluna: amount * 1000000});
+  const message = new MsgSend(wallet.key.accAddress, to, { uluna: amount * 1000000 });
   const tx = await wallet.createAndSignTx({
     msgs: [message],
     memo,
@@ -48,4 +49,6 @@ async function sendTransaction(amount, to, mnemonic, memo = "") {
   return response;
 }
 
-module.exports = { getBalance, newWallet, getTransactions, sendTransaction };
+module.exports = {
+  getBalance, newWallet, getTransactions, sendTransaction,
+};

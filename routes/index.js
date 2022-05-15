@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 
 const router = express.Router();
 const {
@@ -6,9 +6,9 @@ const {
   newWallet,
   getTransactions,
   sendTransaction,
-} = require("../services/TerraService");
+} = require('../services/TerraService');
 
-router.get("/wallet/balance/:address", async (req, res) => {
+router.get('/wallet/balance/:address', async (req, res) => {
   try {
     const { address } = req.params;
     const balance = await getBalance(address);
@@ -22,7 +22,7 @@ router.get("/wallet/balance/:address", async (req, res) => {
   }
 });
 
-router.get("/wallet/new", async (req, res) => {
+router.get('/wallet/new', async (req, res) => {
   try {
     const mk = newWallet();
     const accountAddress = mk.accAddress;
@@ -38,7 +38,7 @@ router.get("/wallet/new", async (req, res) => {
   }
 });
 
-router.get("/transactions/in/:address", async (req, res) => {
+router.get('/transactions/in/:address', async (req, res) => {
   try {
     const { address } = req.params;
     const transactions = await getTransactions(address);
@@ -52,9 +52,11 @@ router.get("/transactions/in/:address", async (req, res) => {
   }
 });
 
-router.post("/transactions", async (req, res) => {
+router.post('/transactions', async (req, res) => {
   try {
-    const { to, mnemonic, amount, memo } = req.body;
+    const {
+      to, mnemonic, amount, memo,
+    } = req.body;
     const response = await sendTransaction(amount, to, mnemonic, memo);
     res.json({
       result: response,
