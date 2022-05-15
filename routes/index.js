@@ -6,7 +6,7 @@ const {
   newWallet,
   getTransactions,
   sendTransaction,
-} = require('../services/TerraService');
+} = require('../helpers/terra-helper');
 
 router.get('/wallet/balance/:address', async (req, res) => {
   try {

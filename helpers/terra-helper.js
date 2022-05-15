@@ -6,7 +6,6 @@ const {
 const { default: axios } = require('axios');
 const { exit } = require('process');
 
-const GAS_LIMIT = 10000000;
 require('dotenv').config();
 
 const { NETWORK_ADDRESS } = process.env;
