@@ -52,7 +52,7 @@ router.get('/transactions/in/:address', async (req, res) => {
   }
 });
 
-router.post('/transactions', async (req, res) => {
+router.post('/tx/new', async (req, res) => {
   try {
     const {
       to, mnemonic, amount, memo,
