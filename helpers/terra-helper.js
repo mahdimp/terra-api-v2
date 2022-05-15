@@ -8,11 +8,11 @@ const { exit } = require('process');
 
 require('dotenv').config();
 
-const { NETWORK_ADDRESS } = process.env;
+const { NETWORK_ADDRESS, CHAIN_ID } = process.env;
 
 const terraClient = new LCDClient({
   URL: NETWORK_ADDRESS,
-  chainID: 'columbus-5',
+  chainID: CHAIN_ID,
 });
 
 async function getBalance(address) {
