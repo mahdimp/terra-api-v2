@@ -8,7 +8,7 @@ const { exit } = require('process');
 
 require('dotenv').config();
 
-const { NETWORK_ADDRESS, CHAIN_ID } = process.env;
+const { NETWORK_ADDRESS, CHAIN_ID, TERRA_API } = process.env;
 
 const terraClient = new LCDClient({
   URL: NETWORK_ADDRESS,
@@ -31,7 +31,7 @@ function newWallet() {
 }
 
 async function getTransactions(address) {
-  const url = `https://bombay-fcd.terra.dev/v1/txs?offset=0&limit=100&account=${address}`;
+  const url = `${TERRA_API}/v1/txs?offset=0&limit=100&account=${address}`;
   const res = await axios.get(url);
   return res.data;
 }
