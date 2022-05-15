@@ -32,8 +32,25 @@ function newWallet() {
 
 async function getTransactions(address) {
   const url = `${TERRA_API}/v1/txs?offset=0&limit=100&account=${address}`;
-  const res = await axios.get(url);
-  return res.data;
+  const response = await axios.get(url);
+  const { data } = response;
+  const { txs } = data;
+  let transactions = []
+  if (txs) {
+    transactions = txs.filter(tx => {
+      const txValue = tx.tx.value;
+      const txValueMsg = txValue.msg;
+      bankMessage = txValueMsg.find(m => m.type === 'bank/MsgSend' && m.value.to_address === address)
+      lunaAmount = bankMessage?.value?.amount.find(x => x.denom === 'uluna')
+      return lunaAmount
+    })
+
+    transactions = transactions.map( tx => ({
+      id: tx.id,
+      ...tx.tx.value
+    }))
+  }
+  return transactions
 }
 
 async function sendTransaction(amount, to, mnemonic, memo = '') {
