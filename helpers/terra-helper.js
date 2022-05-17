@@ -42,13 +42,28 @@ async function getTransactions(address) {
       const txValueMsg = txValue.msg;
       bankMessage = txValueMsg.find(m => m.type === 'bank/MsgSend' && m.value.to_address === address)
       lunaAmount = bankMessage?.value?.amount.find(x => x.denom === 'uluna')
-      return lunaAmount
+      return !!lunaAmount
     })
 
-    transactions = transactions.map( tx => ({
-      id: tx.id,
-      ...tx.tx.value
-    }))
+    transactions = transactions.map( tx => {
+      bankMessage = tx.tx.value.msg.find(m => m.type === 'bank/MsgSend' && m.value.to_address === address)
+      value = bankMessage?.value?.amount.find(x => x.denom === 'uluna')
+      from = bankMessage?.value?.from_address
+      to = bankMessage?.value?.to_address
+
+      return {
+        id: tx.id,
+        timestamp: tx.timestamp,
+        gas_wanted: tx.gas_wanted,
+        gas_used: tx.gas_used,
+        txhash: tx.txhash,
+        height: tx.height,
+        memo: tx.tx.value.memo,
+        value,
+        from,
+        to
+      }
+    })
   }
   return transactions
 }
