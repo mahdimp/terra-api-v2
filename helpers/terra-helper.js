@@ -37,28 +37,28 @@ async function getTransactions(address) {
   const { txs } = data;
   let transactions = []
   if (txs) {
-    transactions = txs.filter(tx => {
-      const txValue = tx.tx.value;
-      const txValueMsg = txValue.msg;
-      bankMessage = txValueMsg.find(m => m.type === 'bank/MsgSend' && m.value.to_address === address)
-      lunaAmount = bankMessage?.value?.amount.find(x => x.denom === 'uluna')
+    transactions = txs.filter(transaction => {
+      const txBody = transaction.tx.body;
+      const txValueMsgs = txBody?.messages;
+      bankMessage = getBankMessage(txValueMsgs, address)
+      lunaAmount = bankMessage?.amount.find(x => x.denom === 'uluna')
       return !!lunaAmount
     })
-
-    transactions = transactions.map( tx => {
-      bankMessage = tx.tx.value.msg.find(m => m.type === 'bank/MsgSend' && m.value.to_address === address)
-      value = bankMessage?.value?.amount.find(x => x.denom === 'uluna')
-      from = bankMessage?.value?.from_address
-      to = bankMessage?.value?.to_address
-
+    transactions = transactions.map( transaction => {
+      const txBody = transaction.tx.body;
+      const txValueMsgs = txBody?.messages;
+      bankMessage = getBankMessage(txValueMsgs, address)
+      value = getLunaAmount()
+      from = bankMessage?.from_address
+      to = bankMessage?.to_address
       return {
-        id: tx.id,
-        timestamp: tx.timestamp,
-        gas_wanted: tx.gas_wanted,
-        gas_used: tx.gas_used,
-        txhash: tx.txhash,
-        height: tx.height,
-        memo: tx.tx.value.memo,
+        id: transaction.id,
+        timestamp: transaction.timestamp,
+        gas_wanted: transaction.gas_wanted,
+        gas_used: transaction.gas_used,
+        txhash: transaction.txhash,
+        height: transaction.height,
+        memo: transaction.tx.body.memo,
         value,
         from,
         to
@@ -66,6 +66,14 @@ async function getTransactions(address) {
     })
   }
   return transactions
+}
+
+function getLunaAmount() {
+  return bankMessage?.amount.find(x => x.denom === 'uluna');
+}
+
+function getBankMessage(txValueMsgs, address) {
+  return txValueMsgs?.find(message => message["@type"] === '/cosmos.bank.v1beta1.MsgSend' && message.to_address === address);
 }
 
 async function sendTransaction(amount, to, mnemonic, memo = '') {
