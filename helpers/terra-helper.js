@@ -48,7 +48,7 @@ async function getTransactions(address) {
       const txBody = transaction.tx.body;
       const txValueMsgs = txBody?.messages;
       bankMessage = getBankMessage(txValueMsgs, address)
-      value = getLunaAmount()
+      value = getLunaAmount(bankMessage)
       from = bankMessage?.from_address
       to = bankMessage?.to_address
       return {
@@ -68,7 +68,7 @@ async function getTransactions(address) {
   return transactions
 }
 
-function getLunaAmount() {
+function getLunaAmount(bankMessage) {
   return bankMessage?.amount.find(x => x.denom === 'uluna');
 }
 
